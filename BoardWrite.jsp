@@ -1,5 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR"%>
-
+<%@ page import="java.net.URLEncoder"%>
+<% String encoded_key ="";
+	
+	String column = request.getParameter("column");
+	if(column == null) column="";
+	
+	String key = request.getParameter("key");
+	if(key!=null){
+		encoded_key=URLEncoder.encode(key,"euc-kr");
+	}else{
+		key="";
+	}
+	%>
 <HTML>
 <HEAD>
 	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="TEXT/HTML; CHARSET=euc-kr"/>
@@ -117,11 +129,11 @@
 
 	<TR ALIGN=CENTER>
 		<TD WIDTH=110 ALIGN=LEFT>
-			<IMG SRC="../images/btn_list.gif" onClick="javascript:location.replace('BoardList.jsp')" STYLE=CURSOR:HAND>
+			<IMG SRC="../images/btn_list.gif" onClick="javascript:location.replace('BoardList.jsp?column=<%=column%>&key=<%=encoded_key%>')" STYLE=CURSOR:HAND>
 		</TD>
 		<TD WIDTH=400 ALIGN=CENTER>		
 			<IMG SRC="../images/btn_save.gif" STYLE=CURSOR:HAND onClick="javascript:CheckForm(BoardWrite)">&nbsp;&nbsp;
-			<IMG SRC="../images/btn_cancel.gif" STYLE=CURSOR:HAND>
+			<IMG SRC="../images/btn_cancel.gif" STYLE=CURSOR:HAND onClick="javascript:location.replace('BoardList.jsp?column=<%=column%>&key=<%=encoded_key%>')">
 		</TD>
 		<TD WIDTH=110 ALIGN=LEFT>&nbsp;</TD>   
 	</TR>
