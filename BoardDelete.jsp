@@ -1,7 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR"%>
-<<<<<<< HEAD
-
-=======
 <%@ page import="java.net.URLEncoder"%>
 <%@ page import="java.sql.*" %>
 <%int rno = Integer.parseInt(request.getParameter("rno"));
@@ -41,14 +38,11 @@ try{
 		String content= rs1.getString(4);
 		content = content.replaceAll("\n\r","<BR>");
 	%>
->>>>>>> version2
 <HTML>
 <HEAD>
 	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="TEXT/HTML; CHARSET=euc-kr"/>
 	<LINK REL="stylesheet" type="text/css" href="../include/style.css"/>
 	<TITLE>게시글 삭제</TITLE>
-<<<<<<< HEAD
-=======
 	<script type="text/javascript">
 	function CheckForm(form){
 	if(!form.pass.value){
@@ -60,7 +54,6 @@ try{
 		
 	}
 	</script>
->>>>>>> version2
 </HEAD>
 
 <BODY>
@@ -86,48 +79,28 @@ try{
 //------------------------------- JSP CODE END 	
 %>
 
-<<<<<<< HEAD
-<FORM NAME="BoarDelete" METHOD=POST ACTION="BoardDeleteProc.jsp">
-=======
 <FORM NAME="BoardDelete" METHOD=POST ACTION="BoardDeleteProc.jsp?rno=<%=rno%>&column=<%=column%>&key=<%=encoded_key%>">
->>>>>>> version2
 
 <TABLE WIDTH=620 BORDER=1 CELLSPACING=0 CELLPADDING=1 ALIGN=CENTER>
 
 	<TR>
 		<TD WIDTH=120 ALIGN=CENTER><B>이름</B></TD>
-<<<<<<< HEAD
-		<TD WIDTH=500>홍길동</TD>
-=======
 		<TD WIDTH=500><%=name%></TD>
->>>>>>> version2
 	</TR>
 	
 	<TR>
 		<TD WIDTH=120 ALIGN=CENTER><B>전자우편</B></TD>
-<<<<<<< HEAD
-		<TD WIDTH=500>hong@abc.com</TD>
-=======
 		<TD WIDTH=500><%=mail%></TD>
->>>>>>> version2
 	</TR>
 	
 	<TR>
 		<TD WIDTH=120 ALIGN=CENTER><B>제목</B></TD>
-<<<<<<< HEAD
-		<TD WIDTH=500>홍길동입니다.</TD>
-=======
 		<TD WIDTH=500><%=subject%></TD>
->>>>>>> version2
 	</TR>
 	
 	<TR>
 		<TD WIDTH=120 ALIGN=CENTER><B>내용</B></TD>
-<<<<<<< HEAD
-		<TD WIDTH=500>안녕하세요.<BR>홍길동입니다.</TD>
-=======
 		<TD WIDTH=500><%=content%>></TD>
->>>>>>> version2
 	</TR>
 	
 	<TR>
@@ -145,9 +118,6 @@ try{
 </TABLE>
 
 </FORM>
-<<<<<<< HEAD
-
-=======
 <%
 }
 catch(SQLException e) { e.printStackTrace();
@@ -158,18 +128,12 @@ catch(SQLException e) { e.printStackTrace();
 }
 
 %>
->>>>>>> version2
 <TABLE WIDTH=620 HEIGHT=50 BORDER=0 CELLSPACING=1 CELLPADDING=1 ALIGN=CENTER>
 
 	<TR ALIGN=CENTER>
 		<TD>
-<<<<<<< HEAD
-			<IMG SRC="../images/btn_del.gif" STYLE=CURSOR:HAND>&nbsp;&nbsp;
-			<IMG SRC="../images/btn_cancel.gif" STYLE=CURSOR:HAND>
-=======
 			<IMG SRC="../images/btn_del.gif" onClick="javascript:CheckForm(BoardDelete)" STYLE=CURSOR:HAND>&nbsp;&nbsp;
 			<IMG SRC="../images/btn_cancel.gif?rno=<%=rno%>&column=<%=column%>&key=<%=encoded_key%>" STYLE=CURSOR:HAND>
->>>>>>> version2
 		</TD>
 	</TR>
 	

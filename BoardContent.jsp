@@ -1,7 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR"%>
-<<<<<<< HEAD
-
-=======
 <%@ page import = "java.sql.*" %>
 <%@ page import = "java.net.URLEncoder" %>
 <% int rno = Integer.parseInt(request.getParameter("rno"));
@@ -51,7 +48,6 @@
 		
 	
 	%>
->>>>>>> version2
 <HTML>
 <HEAD>
 	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="TEXT/HTML; CHARSET=euc-kr"/>
@@ -88,45 +84,28 @@
 
 	<TR>
 		<TD WIDTH=120 ALIGN=CENTER><B>이름</B></TD>
-<<<<<<< HEAD
-		<TD WIDTH=500>홍길동</TD>
-=======
 		<TD WIDTH=500><%=name%></TD>
->>>>>>> version2
 	</TR>
 	
 	<TR>
 		<TD WIDTH=120 ALIGN=CENTER><B>전자우편</B></TD>
-<<<<<<< HEAD
-		<TD WIDTH=500>hong@abc.com</TD>
-=======
 		<TD WIDTH=500><%=mail%></TD>
->>>>>>> version2
 	</TR>
 	
 		<TR>
 		<TD WIDTH=120 ALIGN=CENTER><B>제목</B></TD>
-<<<<<<< HEAD
-		<TD WIDTH=500>홍길동입니다.</TD>
-=======
 		<TD WIDTH=500><%=subject%></TD>
->>>>>>> version2
 	</TR>
 	
 	<TR>
 		<TD WIDTH=120 ALIGN=CENTER><B>내용</B></TD>
-<<<<<<< HEAD
-		<TD WIDTH=500>안녕하세요.<BR>홍길동입니다.</TD>
-=======
-		<TD WIDTH=500>안녕하세요.<BR><%=content%></TD>
->>>>>>> version2
+		<TD WIDTH=500><%=content%></TD>
 	</TR>
 	
 	<TR>
 		<TD WIDTH=120 ALIGN=CENTER><B>첨부파일</B></TD>
 		<TD WIDTH=500>첨부된 파일이 없습니다.</TD>
 	</TR> 
-	 
 </TABLE>
 
 
@@ -134,28 +113,16 @@
 
 	<TR ALIGN=CENTER>
 		<TD WIDTH="310" ALIGN=LEFT>
-<<<<<<< HEAD
-			<IMG SRC="../images/btn_list.gif" STYLE=CURSOR:HAND onClick="javascript:location.replace('BoardList.jsp')">
-		</TD>
-		<TD WIDTH="310" ALIGN=RIGHT>    	
-			<IMG SRC="../images/btn_reply.gif" STYLE=CURSOR:HAND onClick="javascript:location.replace('BoardReply.jsp')">&nbsp;&nbsp;
-			<IMG SRC="../images/btn_mdfy.gif" STYLE=CURSOR:HAND onClick="javascript:location.replace('BoardModify.jsp')">&nbsp;&nbsp;
-			<IMG SRC="../images/btn_del.gif" STYLE=CURSOR:HAND onClick="javascript:location.replace('BoardDelete.jsp')">
-=======
 			<IMG SRC="../images/btn_list.gif" STYLE=CURSOR:HAND onClick="javascript:location.replace('BoardList.jsp?column=<%=column%>&key=<%=encoded_key%>')">
 		</TD>
 		<TD WIDTH="310" ALIGN=RIGHT>    	
 			<IMG SRC="../images/btn_reply.gif" STYLE=CURSOR:HAND onClick="javascript:location.replace('BoardReply.jsp?rno=<%=rno%>&column=<%=column%>&key=<%=encoded_key%>')">&nbsp;&nbsp;
 			<IMG SRC="../images/btn_mdfy.gif" STYLE=CURSOR:HAND onClick="javascript:location.replace('BoardModify.jsp?rno=<%=rno%>&column=<%=column%>&key=<%=encoded_key%>')">&nbsp;&nbsp;
 			<IMG SRC="../images/btn_del.gif" STYLE=CURSOR:HAND onClick="javascript:location.replace('BoardDelete.jsp?rno=<%=rno%>&column=<%=column%>&key=<%=encoded_key%>')">
->>>>>>> version2
 		</TD>
 	</TR>
 	
 </TABLE>
-<<<<<<< HEAD
-
-=======
 <%
 }catch(SQLException e){
 e.printStackTrace();
@@ -164,6 +131,5 @@ rs1.close();
 pstmt.close();
 conn.close();
 }%>
->>>>>>> version2
 </BODY>
 </HTML>
