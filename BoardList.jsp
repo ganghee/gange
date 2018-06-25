@@ -40,11 +40,11 @@ try {
 	
 	if (column.equals("") || key.equals("")) {
 		 Query1 = "select count(RcdNo) from board";
-		 Query2 = "select RcdNo, UsrSubject, UsrName, UsrDate, UsrRefer from board order by RcdNo DESC";
+		 Query2 = "select RcdNo, UsrSubject, UsrName, UsrDate, UsrRefer, RcdLevel from board order by GrpNo DESC, RcdOrder ASC";
 	} else { 
 		Query1 ="select count(RcdNo) from board where " + column + " LIKE '%" + key + "%'";
-		Query2 ="select RcdNo, UsrSubject, UsrName, UsrDate, UsrRefer from board where " + column + 
-				" LIKE '%" +key + "%'" + " order by RcdNo desc";
+		Query2 ="select RcdNo, UsrSubject, UsrName, UsrDate, UsrRefer, RcdLevel from board where " + column + 
+				" LIKE '%" +key + "%'" + " order by GrpNo DESC, RcdOrder ASC";
 	}
 	
 	pstmt = conn.prepareStatement(Query1);
@@ -112,7 +112,9 @@ try {
 		String today = Current.format(date);
 		
 		int refer = rs2.getInt("UsrRefer");
-	
+		int level = rs2.getInt("RcdLevel");
+		
+				
 	
 	
 	
@@ -123,7 +125,38 @@ try {
 	
 	<TR>
 		<TD WIDTH=45 ALIGN=CENTER><%=TotalRecords %></TD>
-		<TD WIDTH=395 ALIGN=LEFT><A HREF="BoardContent.jsp?rno=<%=rno%>&column=<%=column%>&key=<%=encoded_key%>"><%=subject %></A></TD>
+		<TD WIDTH=395 ALIGN=LEFT>
+<%
+		for(int i=0; i<level; i++) out.println("&nbsp;&nbsp;");
+		if ( level > 0 ) {
+			String IMGURL = "../images/re.gif";
+			out.print("<IMG ALIGN = ABSMIDDLE SRC=" + IMGURL + ">");
+		}
+
+		int max_length = 34 ;
+		int cut_length = max_length-(level);
+		
+		if(subject.length()> cut_length){
+			subject = subject.substring(0,cut_length);
+			subject = subject + "..";
+		}
+
+
+%>
+				
+		<A HREF="BoardContent.jsp?rno=<%=rno%>&column=<%=column%>&key=<%=encoded_key%>"><%=subject %></A>
+<%
+		long now = System.currentTimeMillis();
+		long dist = (now-date)/1000;
+		long during = 60*60*24;
+		
+		if(during>dist){
+			String IMGURL="../images/new.gif";
+			out.println("<IMG ALIGN=ABSMIDDLE width=15 HEIGHT=12 SRC=" + IMGURL + ">");
+		}
+
+%>
+		</TD>
 		<TD WIDTH=65 ALIGN=CENTER><%=name %></TD>
 		<TD ALIGN=CENTER><%=today%></TD>
 		<TD ALIGN=CENTER><%=refer%></TD>
