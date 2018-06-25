@@ -1,10 +1,76 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR"%>
+<%@ page import="java.sql.*" %>
+<%@ page import="java.net.URLEncoder" %>
+<%
+int rno= Integer.parseInt(request.getParameter("rno"));
+
+Connection conn= null;
+PreparedStatement pstmt = null;
+ResultSet rs=null;
+
+String column=request.getParameter("column");
+if (column == null ) column ="";
+String encoded_key="";
+String key = request.getParameter("key");
+if (key != null) encoded_key=URLEncoder.encode(key,"euc-kr");
+else{key = "";}
+
+try {
+	String jdbcUrl= "jdbc:mysql://localhost:3306/jspdb";
+	String jdbcId= "jspuser";
+	String jdbcPw = "jsppass";
+	Class.forName("com.mysql.jdbc.Driver");
+	conn = DriverManager.getConnection(jdbcUrl,jdbcId,jdbcPw);
+	
+	String Query1 = "select UsrSubject, UsrContent from board where RcdNo = ?";
+	pstmt = conn.prepareStatement(Query1);
+	pstmt.setInt(1,rno);
+	rs = pstmt.executeQuery();
+	rs.next();
+	
+	String subject = rs.getString(1).trim();
+	String content = rs.getString(2).trim();
+	content = content.replaceAll("\n\r","<br>");
+
+%>
+
 
 <HTML>
 <HEAD>
 	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="TEXT/HTML; CHARSET=euc-kr"/>
-	<LINK REL="stylesheet" type="text/css" href="../include/style.css"/>		
+	<LINK REL="stylesheet" type="text/css" href="../include/style.css"/>
+	<SCRIPT LANGUAGE="javascript" SRC="../include/scripts.js"></SCRIPT>		
 	<TITLE>답변글 입력</TITLE>
+	<script type="text/javascript">
+	
+	function CheckForm(form){
+		if(!form.name.value){
+			alert('성명을 입력하시오');
+			form.name.focus();
+			return true;
+		}
+		if(form.mail.value){
+			if(!isCorrectEmail('BoardReply','mail')){
+				alert("전자우편 형식이 올바르지 않습니다.");
+				form.mail.focus();
+				form.mail.select();
+				return;
+			}
+		}
+		if(!form.subject.value){
+			alert('게시판의 제목을 입력하시오');
+			form.subject.focus();
+			return true;
+		}
+		if(!form.pass.value){
+			alert('패스워드를 입력하시오');
+			form.pass.focus();
+			return true;
+		}
+		form.submit();
+		
+	}
+	</script>
 </HEAD>
 
 <BODY>
@@ -34,25 +100,25 @@
 
 	<TR>
 		<TD WIDTH=120 ALIGN=CENTER><B>원글제목</B></TD>
-		<TD WIDTH=500>원글의 제목입니다</TD>
+		<TD WIDTH=500><%=subject %></TD>
 	</TR>
 	
 	<TR>
 		<TD WIDTH=120 ALIGN=CENTER><B>원글내용</B></TD>
-		<TD WIDTH=500>원글의 내용입니다.</TD>
+		<TD WIDTH=500><%=column %></TD>
 	</TR>
 	
 </TABLE>
 <BR>
 
-<FORM NAME="BoardReply" METHOD=POST ACTION="BoardReplyProc.jsp">
+<FORM NAME="BoardReply" METHOD=POST ACTION="BoardReplyProc.jsp?rno=<%=rno%>&key=<%=encoded_key%>&column=<%=column%>">
 
 <TABLE WIDTH=620 BORDER=1 CELLSPACING=0 CELLPADDING=2 ALIGN=CENTER>
 
 	<TR>
 		<TD WIDTH=120 ALIGN=CENTER><B>이름</B></TD>
 		<TD WIDTH=500>
-			<INPUT TYPE=TEXT NAME="name" SIZE=20 style="ime-mode:active">
+			<INPUT TYPE=TEXT NAME="name" SIZE=20 style="ime-mode:active" onKeyDown="javascript:Korean()">
 		</TD>
 	</TR>
 	
@@ -94,13 +160,25 @@
 </TABLE>
 
 </FORM>
-
+<%
+}
+			catch(SQLException e) {
+				e.printStackTrace();
+				
+			} finally {
+				
+				rs.close();
+				pstmt.close();
+				conn.close();
+			}
+%>
 <TABLE WIDTH=620 HEIGHT=50 BORDER=0 CELLSPACING=1 CELLPADDING=1 ALIGN=CENTER>
 
 	<TR ALIGN=CENTER>
 		<TD>
-			<IMG SRC="../images/btn_save.gif" STYLE=CURSOR:HAND>&nbsp;&nbsp;
-			<IMG SRC="../images/btn_cancel.gif" STYLE=CURSOR:HAND>
+			<IMG SRC="../images/btn_save.gif" onClick="javascript:CheckForm(BoardReply)" STYLE=CURSOR:HAND>&nbsp;&nbsp;
+			<IMG SRC="../images/btn_cancel.gif" onClick="javascript:location.replace('BoardContent.jsp?rno=<%=rno %>&key=<%=encoded_key %>
+			&column=<%=column %>')" STYLE=CURSOR:HAND>
 		</TD>
 	</TR>
 	
