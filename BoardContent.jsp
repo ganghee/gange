@@ -33,7 +33,7 @@
 		pstmt.setInt(1,rno);
 		pstmt.executeUpdate();
 		
-		String Query2 = "select UsrName, UsrMail, UsrSubject, UsrContent from board where RcdNo=?";
+		String Query2 = "select UsrName, UsrMail, UsrSubject, UsrContent, UsrFileName, UsrFileSize from board where RcdNo=?";
 		pstmt = conn.prepareStatement(Query2);
 		pstmt.setInt(1,rno);
 		rs1 = pstmt.executeQuery();
@@ -45,8 +45,8 @@
 		String content= rs1.getString(4).trim();
 		content = content.replaceAll("\r\n","<BR>");
 		
-		
-	
+		String filename = rs1.getString(5);
+		int filesize = rs1.getInt(6)/1000;
 	%>
 <HTML>
 <HEAD>
@@ -104,7 +104,20 @@
 	
 	<TR>
 		<TD WIDTH=120 ALIGN=CENTER><B>첨부파일</B></TD>
-		<TD WIDTH=500>첨부된 파일이 없습니다.</TD>
+		<TD WIDTH=500>
+	<%
+		if(filename == null ){
+			out.println("첨부된 파일이 없습니다.");
+		}else{
+			String IMGURL="../images/btn_filedown.gif";
+			out.println("<IMG ALIGN=ABSMIDDLE SRC=" + IMGURL +">");
+	%>
+		<A HREF="filedownload.jsp?filename=<%=filename %>"><%=filename %></A>
+		(<%=filesize %> Kbyte)
+	<%
+		}
+	%>
+	</TD>
 	</TR> 
 </TABLE>
 
