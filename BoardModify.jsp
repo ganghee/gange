@@ -26,7 +26,7 @@ try{
 		Class.forName("com.mysql.jdbc.Driver");
 		conn=DriverManager.getConnection(jdbcUrl,jdbcId,jdbcPw);
 		
-		String Query1 = "select UsrName, UsrMail, UsrSubject, UsrContent from board where RcdNo=?";
+		String Query1 = "select UsrName, UsrMail, UsrSubject, UsrContent, UsrFileName, UsrFileSize from board where RcdNo=?";
 		pstmt = conn.prepareStatement(Query1);
 		pstmt.setInt(1,rno);
 		rs1 = pstmt.executeQuery();
@@ -35,13 +35,19 @@ try{
 		String name= rs1.getString(1);
 		String mail= rs1.getString(2);
 		String subject= rs1.getString(3);
-		String content= rs1.getString(4);%>
+		String content= rs1.getString(4);
+		String filename = rs1.getString(5);
+		int filesize = rs1.getInt(6);
+		filesize = filesize/1000;
+		
+		
+		%>
 <HTML>
 <HEAD>
 	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="TEXT/HTML; CHARSET=euc-kr"/>
 	<LINK REL="stylesheet" type="text/css" href="../include/style.css"/>
 	<TITLE>게시글 수정</TITLE>
-	<script type="text/javascipt">
+	<script type="text/javascript">
 	function CheckForm(form){
 	if(!form.pass.value){
 			alert('패스워드를 입력하시오');
@@ -77,7 +83,7 @@ try{
 //------------------------------- JSP CODE END 	
 %>
 
-<FORM NAME="BoardModify" METHOD=POST ACTION="BoardModifyProc.jsp?rno=<%=rno%>&column=<%=column%>&key=<%=encoded_key%>')">
+<FORM NAME="BoardModify" METHOD=POST ACTION="BoardModifyProc.jsp?rno=<%=rno%>&column=<%=column%>&key=<%=encoded_key%>" ENCTYPE="multipart/form-data">
 
 <TABLE WIDTH=620 BORDER=1 CELLSPACING=0 CELLPADDING=1 ALIGN=CENTER>
 
@@ -89,14 +95,14 @@ try{
 	<TR>
 		<TD WIDTH=120 ALIGN=CENTER><B>전자우편</B></TD>
 		<TD WIDTH=500>
-			<INPUT TYPE=TEXT NAME="mail" SIZE=60 value='<%=mail%>'>
+			<INPUT TYPE=TEXT NAME="mail" SIZE=60 style="ime-mode:inactive" value='<%=mail%>'>
 		</TD>
 	</TR>
 	
 	<TR>
 		<TD WIDTH=120 ALIGN=CENTER><B>제목</B></TD>
 		<TD WIDTH=500>
-			<INPUT TYPE=TEXT NAME="subject" SIZE=70 style="ime-mode:inactive" value='<%=subject%>' style="ime-mode:inactive">
+			<INPUT TYPE=TEXT NAME="subject" SIZE=70 value='<%=subject%>' >
 		</TD>
 	</TR>
 	
@@ -110,7 +116,18 @@ try{
 	<TR>
 		<TD WIDTH=120 ALIGN=CENTER><B>첨부 파일</B></TD>
 		<TD WIDTH=500>
-			첨부된 파일이 없습니다.	
+		<%
+		if(filename == null ){
+			out.println("첨부된 파일이 없습니다.");
+		}else{
+			String IMGURL="../images/btn_filedown.gif";
+			out.println("<IMG ALIGN=ABSMIDDLE SRC=" + IMGURL +">");
+	%>
+		<A HREF="filedownload.jsp?filename=<%=filename %>"><%=filename %></A>
+		(<%=filesize %> Kbyte)
+	<%
+		}
+	%>
 		</TD>
 	</TR>
 	<TR>
