@@ -1,4 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR"%>
+<%@ page import="com.oreilly.servlet.MultipartRequest"%>
+<%@ page import="com.oreilly.servlet.multipart.DefaultFileRenamePolicy"%>
+<%@ page import="java.util.*"%>
+<%@ page import="java.io.*"%>
 <%@ page import="java.sql.*"%>
 <%@ page import="java.net.URLEncoder"%>
 
@@ -17,6 +21,16 @@ if(column==null) column="";
 String key = request.getParameter("key");
 if(key!=null)  encoded_key=URLEncoder.encode(key,"euc-kr");
 else{key="";}
+
+String filename = null;
+int filesize = 0;
+
+String saveFolder = "upload_files";
+String encType = "euc-kr";
+int sizeLimit = 10*1024*1024;
+ServletContext context = getServletContext();
+String realFolder = context.getRealPath(saveFolder);
+DefaultFileRenamePolicy policy = new DefaultFileRenamePolicy();
 
 try{ 
 	String jdbcURL="jdbc:mysql://localhost:3306/jspdb";
@@ -48,13 +62,22 @@ try{
 	pstmt.setInt(2,order);
 	pstmt.executeUpdate();
 	
-	String name = request.getParameter("name");
-	String mail = request.getParameter("mail");
-	String subject = request.getParameter("subject");
-	String content = request.getParameter("content");
-	String pass = request.getParameter("pass");
-	String filename = null;
-	int filesize = 0;
+	MultipartRequest multi = new MultipartRequest(request, realFolder, sizeLimit, encType, new DefaultFileRenamePolicy());
+	filename = multi.getFilesystemName("filename");
+	
+	if(filename != null){
+		Enumeration files = multi.getFileNames();
+		String fname = (String)files.nextElement();
+		File file = multi.getFile(fname);
+		filesize = (int)file.length();
+	}
+	
+	String name = multi.getParameter("name");
+	String mail = multi.getParameter("mail");
+	String subject = multi.getParameter("subject");
+	String content = multi.getParameter("content");
+	String pass = multi.getParameter("pass");
+	
 	int refer = 0;
 	long now = System.currentTimeMillis();
 	
