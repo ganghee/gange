@@ -1,9 +1,23 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
+    <%@ page import="com.oreilly.servlet.MultipartRequest"%>
+<%@ page import="com.oreilly.servlet.multipart.DefaultFileRenamePolicy"%>
+<%@ page import="java.util.*"%>
+<%@ page import="java.io.*"%>
 <%@ page import="java.sql.*"%>
 <%request.setCharacterEncoding("euc-kr");%>
 
 <%
+String filename = null;
+int filesize =0;
+String saveFolder = "upload_files";
+ServletContext context = getServletContext();
+String realFolder = context.getRealPath(saveFolder);
+
+int sizeLimit = 10*1024*1024;
+String encType = "euc-kr";
+DefaultFileRenamePolicy policy = new DefaultFileRenamePolicy();
+
 Connection conn = null;
 Statement stmt = null;
 PreparedStatement pstmt = null;
@@ -17,11 +31,21 @@ String jdbcPw = "jsppass";
 Class.forName("com.mysql.jdbc.Driver");
 conn = DriverManager.getConnection(jdbcUrl,jdbcId,jdbcPw);
 
-String name = request.getParameter("name");
-String mail = request.getParameter("mail");
-String subject = request.getParameter("subject");
-String content = request.getParameter("content");
-String pass = request.getParameter("pass");
+MultipartRequest multi = new MultipartRequest(request, realFolder, sizeLimit, encType, policy);
+filename = multi.getFilesystemName("filename");
+
+if(filename!=null){
+	Enumeration files = multi.getFileNames();
+	String fname = (String)files.nextElement();
+	File file = multi.getFile(fname);
+	filesize = (int)file.length();
+}
+
+String name = multi.getParameter("name");
+String mail = multi.getParameter("mail");
+String subject = multi.getParameter("subject");
+String content = multi.getParameter("content");
+String pass = multi.getParameter("pass");
 
 String Query1 = "SELECT max(RcdNo),max(GrpNo) FROM board";
 stmt = conn.createStatement();
@@ -32,8 +56,7 @@ rs.next();
 int uid = (rs.getInt(1))+1;
 int gid = (rs.getInt(2))+1;
 
-String filename =null;
-int filesize =0;
+
 int refer = 0;
 int level = 0;
 int order = 1;
@@ -61,6 +84,7 @@ out.print(e);
 }finally{
 rs.close();
 pstmt.close();
+stmt.close();
 conn.close();
 response.sendRedirect("BoardList.jsp");
 }
