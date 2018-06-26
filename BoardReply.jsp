@@ -111,7 +111,7 @@ try {
 </TABLE>
 <BR>
 
-<FORM NAME="BoardReply" METHOD=POST ACTION="BoardReplyProc.jsp?rno=<%=rno%>&key=<%=encoded_key%>&column=<%=column%>">
+<FORM NAME="BoardReply" METHOD=POST ACTION="BoardReplyProc.jsp?rno=<%=rno%>&key=<%=encoded_key%>&column=<%=column%>" ENCTYPE="multipart/form-data">
 
 <TABLE WIDTH=620 BORDER=1 CELLSPACING=0 CELLPADDING=2 ALIGN=CENTER>
 
