@@ -74,7 +74,7 @@
 //------------------------------- JSP CODE END 	
 %>
 
-<FORM NAME="BoardWrite" METHOD=POST ACTION="BoardWriteProc.jsp">
+<FORM NAME="BoardWrite" METHOD=POST ACTION="BoardWriteProc.jsp" ENCTYPE="multipart/form-data">
 
 <TABLE WIDTH=620 BORDER=1 CELLSPACING=0 CELLPADDING=2 ALIGN=CENTER>
 
