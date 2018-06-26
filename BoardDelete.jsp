@@ -26,7 +26,7 @@ try{
 		Class.forName("com.mysql.jdbc.Driver");
 		conn=DriverManager.getConnection(jdbcUrl,jdbcId,jdbcPw);
 		
-		String Query1 = "select UsrName, UsrMail, UsrSubject, UsrContent from board where RcdNo=?";
+		String Query1 = "select UsrName, UsrMail, UsrSubject, UsrContent, UsrFileName, UsrFileSize from board where RcdNo=?";
 		pstmt = conn.prepareStatement(Query1);
 		pstmt.setInt(1,rno);
 		rs1 = pstmt.executeQuery();
@@ -37,6 +37,11 @@ try{
 		String subject= rs1.getString(3);
 		String content= rs1.getString(4);
 		content = content.replaceAll("\n\r","<BR>");
+		
+		String filename= rs1.getString(5);
+		int filesize = rs1.getInt(6);
+		filesize = filesize/1000;
+		
 	%>
 <HTML>
 <HEAD>
@@ -100,12 +105,26 @@ try{
 	
 	<TR>
 		<TD WIDTH=120 ALIGN=CENTER><B>내용</B></TD>
-		<TD WIDTH=500><%=content%>></TD>
+		<TD WIDTH=500><%=content%></TD>
 	</TR>
 	
 	<TR>
 		<TD WIDTH=120 ALIGN=CENTER><B>파일첨부</B></TD>
-		<TD WIDTH=500>첨부된 파일이 없습니다.</TD>
+		<TD WIDTH=500>
+		<%
+		if(filename == null ){
+			out.println("첨부된 파일이 없습니다.");
+		}else{
+			String IMGURL="../images/btn_filedown.gif";
+			out.println("<IMG ALIGN=ABSMIDDLE SRC=" + IMGURL +">");
+	%>
+		<A HREF="filedownload.jsp?filename=<%=filename %>"><%=filename %></A>
+		(<%=filesize %> Kbyte)
+	<%
+		}
+	%>
+		</TD>
+	
 	</TR>
 	
 	<TR>
@@ -133,7 +152,7 @@ catch(SQLException e) { e.printStackTrace();
 	<TR ALIGN=CENTER>
 		<TD>
 			<IMG SRC="../images/btn_del.gif" onClick="javascript:CheckForm(BoardDelete)" STYLE=CURSOR:HAND>&nbsp;&nbsp;
-			<IMG SRC="../images/btn_cancel.gif?rno=<%=rno%>&column=<%=column%>&key=<%=encoded_key%>" STYLE=CURSOR:HAND>
+			<IMG SRC="../images/btn_cancel.gif" onClick="javascript:location.replace('BoardContent.jsp?rno=<%=rno%>&column=<%=column%>&key=<%=encoded_key%>')" STYLE=CURSOR:HAND>
 		</TD>
 	</TR>
 	
